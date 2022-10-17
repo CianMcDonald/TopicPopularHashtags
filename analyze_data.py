@@ -1,11 +1,11 @@
 import pandas as pd
 
-df = pd.read_csv('cost_of_living_hashtags.csv')
+df = pd.read_csv('college_students_hashtags.csv')
 
-count = df['hashtag'].value_counts(normalize=True)
+count = df['hashtag'].value_counts()
 print(count)
 
-count.to_csv('frequency_col_hashtags.csv')
+count.to_csv('frequency_college_students_hashtags.csv')
 
 
 

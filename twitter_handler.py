@@ -46,11 +46,51 @@ def connect_to_endpoint(url, headers, params, next_token = None):
 if __name__ == '__main__':
     bearer_token = auth()
     headers = create_headers(bearer_token)
-    keyword = "Cost of living -is:retweet -is:reply has:hashtags"
-    max_results = 15
+    keyword = "college students -is:retweet -is:reply has:hashtags"
+    max_results = 100
+    total_tweets = 0
 
-    while True:
+    count = 0 # Counting tweets per time period
+    max_count = 2000 # Max tweets per time period
+    flag = True
+    next_token = None
+    
+    # Check if flag is true
+    while flag:
+        # Check if max_count reached
+        if count >= max_count:
+            break
+
+        print("-------------------")
+        print("Token: ", next_token)
         url = create_url(keyword, max_results)
-        json_response = connect_to_endpoint(url[0], headers, url[1])
-        append_to_csv(json_response, "cost_of_living_hashtags.csv")
-        time.sleep(600)
+        json_response = connect_to_endpoint(url[0], headers, url[1], next_token)
+        result_count = json_response['meta']['result_count']
+
+        if 'next_token' in json_response['meta']:
+            # Save the token to use for next call
+            next_token = json_response['meta']['next_token']
+            print("Next Token: ", next_token)
+            if result_count is not None and result_count > 0 and next_token is not None:
+                append_to_csv(json_response, "college_students_hashtags.csv")
+                count += result_count
+                total_tweets += result_count
+                print("Total # of Tweets added: ", total_tweets)
+                print("-------------------")
+                time.sleep(5)        
+
+        # If no next token exists
+        else:
+            if result_count is not None and result_count > 0:
+                print("-------------------")
+                append_to_csv(json_response, "college_students_hashtags.csv")
+                count += result_count
+                total_tweets += result_count
+                print("Total # of Tweets added: ", total_tweets)
+                print("-------------------")
+                time.sleep(5)
+            
+            #Since this is the final request, turn flag to false to move to the next time period.
+            flag = False
+            next_token = None
+    print("Total number of results: ", total_tweets)

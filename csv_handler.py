@@ -7,11 +7,12 @@ import unicodedata
 
 def create_csv():
     # Create file
-    csvFile = open("cost_of_living_hashtags.csv", "a", newline="", encoding='utf-8')
+    csvFile = open("college_students_hashtags.csv", "a", newline="", encoding='utf-8')
     csvWriter = csv.writer(csvFile)
 
     #Create headers for the data you want to save, in this example, we only want save these columns in our dataset
     csvWriter.writerow(['hashtag', 'tweet_id', 'tweet', 'created_at', 'geo', 'author_id' ,'lang', 'like_count', 'quote_count', 'reply_count','retweet_count'])
+
 
 def append_to_csv(json_response, fileName):
 
@@ -57,7 +58,7 @@ def append_to_csv(json_response, fileName):
             
             # Append the result to the CSV file
             csvWriter.writerow(res)
-            counter += 1
+        counter += 1
 
         # When done, close the CSV file
     csvFile.close()
