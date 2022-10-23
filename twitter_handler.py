@@ -20,9 +20,7 @@ def create_headers(bearer_token):
     return headers
 
 def create_url(keyword, max_results = 5):
-    
     search_url = "https://api.twitter.com/2/tweets/search/recent" #Change to the endpoint you want to collect data from
-
     #change params based on the endpoint you are using
     query_params = {'query': keyword,
                     # 'start_time': start_date,
@@ -43,10 +41,9 @@ def connect_to_endpoint(url, headers, params, next_token = None):
         raise Exception(response.status_code, response.text)
     return response.json()
 
-if __name__ == '__main__':
+def run_twitter_search(keyword, filename):
     bearer_token = auth()
     headers = create_headers(bearer_token)
-    keyword = "college students -is:retweet -is:reply has:hashtags"
     max_results = 100
     total_tweets = 0
 
@@ -72,7 +69,7 @@ if __name__ == '__main__':
             next_token = json_response['meta']['next_token']
             print("Next Token: ", next_token)
             if result_count is not None and result_count > 0 and next_token is not None:
-                append_to_csv(json_response, "college_students_hashtags.csv")
+                append_to_csv(json_response, filename)
                 count += result_count
                 total_tweets += result_count
                 print("Total # of Tweets added: ", total_tweets)
@@ -83,7 +80,7 @@ if __name__ == '__main__':
         else:
             if result_count is not None and result_count > 0:
                 print("-------------------")
-                append_to_csv(json_response, "college_students_hashtags.csv")
+                append_to_csv(json_response, filename)
                 count += result_count
                 total_tweets += result_count
                 print("Total # of Tweets added: ", total_tweets)

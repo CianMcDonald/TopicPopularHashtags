@@ -1,18 +1,15 @@
 # For saving the response data in CSV format
 import csv
-# For parsing the dates received from twitter in readable formats
-import datetime
-import dateutil.parser
-import unicodedata
 
-def create_csv():
+import dateutil.parser
+
+def create_csv(filename):
     # Create file
-    csvFile = open("college_students_hashtags.csv", "a", newline="", encoding='utf-8')
+    csvFile = open("hashtag_csv/"+filename, "a", newline="", encoding='utf-8')
     csvWriter = csv.writer(csvFile)
 
     #Create headers for the data you want to save, in this example, we only want save these columns in our dataset
     csvWriter.writerow(['hashtag', 'tweet_id', 'tweet', 'created_at', 'geo', 'author_id' ,'lang', 'like_count', 'quote_count', 'reply_count','retweet_count'])
-
 
 def append_to_csv(json_response, fileName):
 
@@ -20,7 +17,7 @@ def append_to_csv(json_response, fileName):
     counter = 0
 
     #Open OR create the target CSV file
-    csvFile = open(fileName, "a", newline="", encoding='utf-8')
+    csvFile = open("hashtag_csv/"+fileName, "a", newline="", encoding='utf-8')
     csvWriter = csv.writer(csvFile)
 
     #Loop through each tweet
